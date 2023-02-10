@@ -64,11 +64,12 @@ class SonicBedLevel:
 	def _generate_moves(self):
 		X, Y, Z, E = self.toolhead.get_position()
 
-		t_seg   = 1./self.freq
-		t_total = self.dz/self.speed
+		t_seg   = 1. / self.freq
+		t_total = self.dz / self.speed
+		n_steps = self.dt // t_seg
 
-		self.z_move = list(range(Z, Z - self.dz, self.dz/t_total))                   # monotonically increasing z step
-		self.e_move = [E + self.incr * ( (-1)**i ) for i in range(self.dt // t_seg)] # oscillating extruder moves over the entire vibrate time
+		self.z_move = list(range(Z, Z - self.dz, self.dz/n_steps))                   # monotonically increasing z step
+		self.e_move = [E + self.incr * ( (-1)**i ) for i in range(n_steps)]          # oscillating extruder moves over the entire vibrate time
 		self.x_move = [X for _ in self.e_move]										 # constant x
 		self.y_move = [Y for _ in self.e_move]									     # constant y
 
