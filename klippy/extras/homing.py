@@ -98,7 +98,7 @@ class HomingMove:
                 X, Y, Z, E = self.toolhead.get_position()
 
                 sonic_homing       = self.printer.lookup_object('sonic_bed_level')
-                sonic_homing.dz    = movepos[2] - E
+                sonic_homing.dz    = movepos[2] - Z
                 sonic_homing.speed = speed
                 sonic_homing.dt    = sonic_homing.dz / sonic_homing.speed
 
