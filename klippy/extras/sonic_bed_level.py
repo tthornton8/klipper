@@ -91,7 +91,7 @@ class SonicBedLevel:
 
 	def _vibrate_move(self):
 		X, Y, Z, E = self.x_move.pop(0), self.y_move.pop(0), self.z_move.pop(0), self.e_move.pop(0)
-		self.toolhead.manual_move([X, Y, Z, E], self.speed)
+		self.toolhead.drip_move([X, Y, Z, E], self.speed)
 
 		if not len(self.e_move):
 			self.vibr = False
