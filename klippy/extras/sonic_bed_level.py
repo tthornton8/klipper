@@ -30,7 +30,7 @@ class SonicBedLevel:
 		mcu = pin_params['chip']
 		self.mcu_endstop = mcu.setup_pin('endstop', pin_params)
 
-	def cmd_VIBRATE(self, gcmd):
+	def cmd_VIBRATE(self, gcmd, all_endstop_trigger=None):
 		self.toolhead = self.printer.lookup_object('toolhead')
 
 		systime = self.printer.get_reactor().monotonic()
@@ -38,6 +38,7 @@ class SonicBedLevel:
 		self.old_max_accel = toolhead_info['max_accel']
 		self.old_max_accel_to_decel = toolhead_info['max_accel_to_decel']
 		max_accel = self.freq * self.accel_per_hz
+		self.all_endstop_trigger = all_endstop_trigger
 		self.gcode.run_script_from_command(
                 "SET_VELOCITY_LIMIT ACCEL=%.3f ACCEL_TO_DECEL=%.3f" % (
                     max_accel, max_accel))
@@ -91,7 +92,11 @@ class SonicBedLevel:
 
 	def _vibrate_move(self):
 		X, Y, Z, E = self.x_move.pop(0), self.y_move.pop(0), self.z_move.pop(0), self.e_move.pop(0)
-		self.toolhead.drip_move([X, Y, Z, E], self.speed)
+
+		if self.all_endstop_trigger is not None:
+			self.toolhead.drip_move([X, Y, Z, E], self.speed, self.all_endstop_trigger)
+		else:
+			self.toolhead.manual_move([X, Y, Z, E], self.speed)
 
 		if not len(self.e_move):
 			self.vibr = False

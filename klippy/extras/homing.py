@@ -102,7 +102,7 @@ class HomingMove:
                 sonic_homing.speed = speed
                 sonic_homing.dt    = sonic_homing.dz / sonic_homing.speed
 
-                sonic_homing.cmd_VIBRATE()
+                sonic_homing.cmd_VIBRATE(all_endstop_trigger = all_endstop_trigger)
 
         except self.printer.command_error as e:
             error = "Error during homing move: %s" % (str(e),)
