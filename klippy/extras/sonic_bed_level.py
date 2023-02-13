@@ -11,7 +11,7 @@ class SonicBedLevel:
 		self.dt   		   = config.getfloat('dt',   3, above=0.)
 		self.accel_per_hz  = config.getfloat('accel_per_hz', 75., above=0.)
 		self.dz            = config.getfloat('dz', 0.01, above=0.01)
-		self.probe_pin     = config.getfloat('probe_pin')
+		self.probe_pin     = config.get('probe_pin')
 		self.speed         = self.dz / self.dt 
 
 		self.gcode = self.printer.lookup_object('gcode')
@@ -25,8 +25,7 @@ class SonicBedLevel:
 		self.vibr = False
 
 		ppins = self.printer.lookup_object('pins')
-		pin = config.get('pin')
-		pin_params = ppins.lookup_pin(pin, can_invert=True, can_pullup=True)
+		pin_params = ppins.lookup_pin(self.probe_pin, can_invert=True, can_pullup=True)
 		mcu = pin_params['chip']
 		self.mcu_endstop = mcu.setup_pin('endstop', pin_params)
 
