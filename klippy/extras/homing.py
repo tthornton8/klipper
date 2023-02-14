@@ -100,9 +100,12 @@ class HomingMove:
                 sonic_homing       = self.printer.lookup_object('sonic_bed_level')
                 sonic_homing.dz    = movepos[2] - Z
                 sonic_homing.speed = speed
-                sonic_homing.dt    = sonic_homing.dz / sonic_homing.speed
+                sonic_homing.dt    = abs(sonic_homing.dz / sonic_homing.speed)
 
-                sonic_homing.cmd_VIBRATE(all_endstop_trigger = all_endstop_trigger)
+                self.gcode = self.printer.lookup_object('gcode')
+                self.gcode.respond_info( str(movepos) )
+                self.gcode.respond_info( str(sonic_homing.dz) )
+                sonic_homing.cmd_VIBRATE(gcmd = None, all_endstop_trigger = all_endstop_trigger)
 
         except self.printer.command_error as e:
             error = "Error during homing move: %s" % (str(e),)

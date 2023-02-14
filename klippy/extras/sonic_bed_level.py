@@ -116,10 +116,10 @@ class SonicBedLevel:
 
 		X, Y, Z, E = self.xyze_move[self.i]
 
-		if self.all_endstop_trigger is not None:
-			self.toolhead.drip_move([X, Y, Z, E], self.speed, self.all_endstop_trigger)
-		else:
-			self.toolhead.move([X, Y, Z, E], self.speed)
+		# if self.all_endstop_trigger is not None:
+		# 	self.toolhead.drip_move([X, Y, Z, E], self.speed, self.all_endstop_trigger)
+		# else:
+		self.toolhead.move([X, Y, Z, E], self.speed)
 
 
 	def _reset_accel(self):
